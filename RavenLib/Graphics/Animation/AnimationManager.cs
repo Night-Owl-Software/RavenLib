@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace RavenLib.Graphics.Animation
 {
-    internal class AnimationManager
+    public class AnimationManager
     {
         private Animation _animation;
         private float _frameTimer;

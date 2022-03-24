@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace RavenLib.Graphics.Animation
 {
-    internal class Animation
+    public class Animation
     {
         public enum AnimationLoopType
         {
@@ -24,6 +24,11 @@ namespace RavenLib.Graphics.Animation
         private int _frameLast;
         private AnimationLoopType _loopType;
         private bool _reverseLoopActive;
+
+        public Rectangle Frame
+        {
+            get { return _frame; }
+        }
 
         public Animation(Texture2D spritesheet, Vector2 framePos, Vector2 frameSize, int frameCount, AnimationLoopType loopType = AnimationLoopType.CutToFirst)
         {
