@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace RavenLib
+namespace RavenLib.Entities
 {
     public class Entity : IEntity
     {
