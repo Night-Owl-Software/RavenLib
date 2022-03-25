@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace RavenLib.Input
 {
-    internal static class Input
+    public static class Input
     {
         private static string _jsonPath;
         private static Dictionary<string, Keys> _inputMap;

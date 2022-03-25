@@ -2,7 +2,7 @@
 
 namespace RavenLib.Input
 {
-    internal class MovementEventArgs : EventArgs
+    public class MovementEventArgs : EventArgs
     {
         /// <summary>
         /// Ranges from 0.0 to 1.0; Refers to the amount of pressure applied to analog sticks.

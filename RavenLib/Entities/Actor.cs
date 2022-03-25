@@ -28,9 +28,9 @@ namespace RavenLib.Entities
         protected bool _isMoving;
         protected bool _isGrounded;
 
-        public Actor(string entityId, Vector2 position, Vector2 size, bool solid, bool visisble, bool enabled,
-            string spriteSheetId = "DebugTexture", float gravityForce = 0f, float gravityDirection = 0f, bool isGrounded) :
-            base(position, size, solid, visisble, enabled)
+        public Actor(string entityId, Vector2 position, Vector2 size, bool solid, bool visible, bool enabled, bool isGrounded,
+            string spriteSheetId = "DebugTexture", float gravityForce = 0f, float gravityDirection = 0f) :
+            base(position, size, solid, visible, enabled)
         {
             /* Create new Constructor for Entity */
             _entityID = entityId;
@@ -197,6 +197,16 @@ namespace RavenLib.Entities
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             _animationManager.Draw(spriteBatch, _drawRectangle);
+        }
+
+        protected void OnMove()
+        {
+            Moved?.Invoke(this, new ActorMoveEventArgs(_collisionBox));
+        }
+
+        protected void OnMoveFinished(Vector2 newPosition)
+        {
+            MoveFinished?.Invoke(this, new ActorMoveFinishedEventArgs(newPosition));
         }
     }
 }

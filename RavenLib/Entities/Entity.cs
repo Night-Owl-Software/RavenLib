@@ -60,7 +60,7 @@ namespace RavenLib.Entities
             return _collisionBox;
         }
 
-        protected void SetCollisionbox()
+        protected virtual void SetCollisionbox()
         {
             _collisionBox = new Rectangle(
                 (int)_position.X,

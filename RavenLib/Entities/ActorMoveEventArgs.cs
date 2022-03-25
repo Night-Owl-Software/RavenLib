@@ -8,12 +8,10 @@ namespace RavenLib.Entities
     public class ActorMoveEventArgs : EventArgs
     {
         public Rectangle Collisionbox { get; }
-        public Rectangle Landingbox { get; }
 
-        public ActorMoveEventArgs(Rectangle proposedCollisionbox, Rectangle proposedLandingbox)
+        public ActorMoveEventArgs(Rectangle proposedCollisionbox)
         {
             Collisionbox = proposedCollisionbox;
-            Landingbox = proposedLandingbox;
         }
     }
 }
