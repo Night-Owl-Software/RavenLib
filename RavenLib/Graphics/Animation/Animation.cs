@@ -1,29 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace RavenLib.Graphics.Animation
 {
+    /// <summary>
+    /// Contains the necessary data to run through a single set of images from a provided spritesheet texture.
+    /// </summary>
     public class Animation
     {
+        /// <summary>
+        /// How to handle reaching the last frame of an animation
+        /// </summary>
         public enum AnimationLoopType
         {
+            /// <summary>
+            /// Immediately cut back to frame 0
+            /// </summary>
             CutToFirst,
+            /// <summary>
+            /// Reverse the animation and play backwards to frame 0
+            /// </summary>
             Reverse
         }
 
-        private Texture2D _spriteTexture;
-        private Vector2 _framePosition;
-        private Vector2 _frameSize;
-        private Rectangle _frame;
-        private int _frameIndex;
-        private int _frameLast;
-        private AnimationLoopType _loopType;
-        private bool _reverseLoopActive;
+        private Texture2D _spriteTexture;       // Image to pull the animation from
+        private Vector2 _framePosition;         // The current frame's position on the spritesheet
+        private Vector2 _frameSize;             // The width (X) and height (Y) of the frame
+        private Rectangle _frame;               // What actually gets drawn to screen
+        private int _frameIndex;                // The current frame number (between 0 and _frameLast
+        private int _frameLast;                 // The final frame number
+        private AnimationLoopType _loopType;    // Dictates how to proceed once _frameLast is reached
+        private bool _reverseLoopActive;        // Used by the AnimationLoopType.Reverse method to play the animation backward
 
         public Rectangle Frame
         {
@@ -42,12 +49,18 @@ namespace RavenLib.Graphics.Animation
             _reverseLoopActive = false;
         }
 
+        /// <summary>
+        /// Calculates the position of the source rectangle to cut out of the _spriteTexture
+        /// </summary>
         private void UpdateFrameRect()
         {
             int _frameX = (int)_framePosition.X + (int)_frameSize.X * _frameIndex;
             _frame = new Rectangle(_frameX, (int)_framePosition.Y, (int)_frameSize.X, (int)_frameSize.Y);
         }
 
+        /// <summary>
+        /// Moves to the next frame or begins a loop if on the last frame
+        /// </summary>
         public void Next()
         {
             switch (_loopType)
@@ -100,11 +113,20 @@ namespace RavenLib.Graphics.Animation
             UpdateFrameRect();
         }
 
+        /// <summary>
+        /// Draws the _frame cut from the _spriteTexture onto the provided SpriteBatch
+        /// </summary>
+        /// <param name="spriteBatch">The spritebatch to draw the frame to</param>
+        /// <param name="destRect">The rectangle to draw the frame into</param>
         public void Draw(SpriteBatch spriteBatch, Rectangle destRect)
         {
             spriteBatch.Draw(_spriteTexture, destRect, _frame, Color.White);
         }
 
+        /// <summary>
+        /// Creates a copy of the Animation and returns it
+        /// </summary>
+        /// <returns>Copy of the Animation</returns>
         public Animation Clone()
         {
             int _frameCount = _frameLast + 1;

@@ -2,14 +2,17 @@
 
 namespace RavenLib.Entities
 {
+    /// <summary>
+    /// A game object that is capable of interacting with other game objects
+    /// </summary>
     public class Entity : IEntity
     {
-        protected Vector2 _position;
-        protected Vector2 _size;
-        protected Rectangle _collisionBox;
-        protected bool _isSolid;
-        protected bool _isVisible;
-        protected bool _isEnabled;
+        protected Vector2 _position;        // Game space position
+        protected Vector2 _size;            // The width (X) and height (Y) of the Entity
+        protected Rectangle _collisionBox;  // Overlapping this triggers a Collided event
+        protected bool _isSolid;            // Determines if the entity repel objects outside of its collisionbox upon collision
+        protected bool _isVisible;          // Determines if the entity runs a Draw method
+        protected bool _isEnabled;          // Determines if the entity runs an Update method
 
         public Vector2 Position
         {
@@ -54,12 +57,18 @@ namespace RavenLib.Entities
             _isEnabled = enabled;
         }
 
-
+        /// <summary>
+        /// Returns the Entity's CollisionBox
+        /// </summary>
+        /// <returns></returns>
         public Rectangle GetCollisionbox()
         {
             return _collisionBox;
         }
 
+        /// <summary>
+        /// Recalculates the Entity's CollisionBox using Position and Size
+        /// </summary>
         protected virtual void SetCollisionbox()
         {
             _collisionBox = new Rectangle(
@@ -69,6 +78,10 @@ namespace RavenLib.Entities
                 (int)_size.Y);
         }
 
+        /// <summary>
+        /// Returns if the Entity is Solid
+        /// </summary>
+        /// <returns></returns>
         public bool IsSolid()
         {
             return _isSolid;

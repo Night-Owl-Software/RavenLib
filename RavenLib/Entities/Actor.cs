@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RavenLib.Graphics;
@@ -8,25 +7,34 @@ using RavenLib.Graphics.Animation;
 
 namespace RavenLib.Entities
 {
+    /// <summary>
+    /// More sophisticated Entities that can move about the game space
+    /// </summary>
     public class Actor : Entity, IEntity
     {
+        /// <summary>
+        /// Triggered any time the Actor attempts to change its position
+        /// </summary>
         public event EventHandler<ActorMoveEventArgs> Moved;
+        /// <summary>
+        /// Triggered any time the Actor finalizes a position change
+        /// </summary>
         public event EventHandler<ActorMoveFinishedEventArgs> MoveFinished;
 
-        protected string _entityID;
-        protected Vector2 _previousPosition;
-        protected Vector2 _center;
-        protected Vector2 _velocity;
-        protected Texture2D _spriteSheet;
-        protected Rectangle _drawRectangle;
-        protected Dictionary<string, Animation> _animationMap;
-        protected AnimationManager _animationManager;
-        protected Animation _currentAnimation;
-        protected float _gravityForce;
-        protected float _gravityDirection;
-        protected bool _isJumping;
-        protected bool _isMoving;
-        protected bool _isGrounded;
+        protected string _entityID; // Reference ID for Actor. Not always used, but available in case needed
+        protected Vector2 _previousPosition;    // The last position the Actor was in
+        protected Vector2 _center;  // The center of the Actor, useful for position awareness to other Actors
+        protected Vector2 _velocity;    // The horizontal (X) and vertical (Y) rates of movement
+        protected Texture2D _spriteSheet;   // The spritesheet used by the Actor for its Animations
+        protected Rectangle _drawRectangle; // The rectangle that the current animation's current frame is drawn to
+        protected Dictionary<string, Animation> _animationMap;  // The set of animations available to the actor
+        protected AnimationManager _animationManager;   // Handles updating and drawing the current animation
+        protected Animation _currentAnimation;  // The active animation being handled by the _animationManager
+        protected float _gravityForce;  // The amount of force that the Actor is being influenced by
+        protected float _gravityDirection;  // The direction of the _gravityForce -- in a platformer, this would be toward the bottom of the screen
+        protected bool _isJumping;  // Determines if the Actor is actively moving upward
+        protected bool _isMoving;   // Determines if the Actor is actively changing position
+        protected bool _isGrounded; // Determines if the Actor has a solid object below it
 
         public Actor(string entityId, Vector2 position, Vector2 size, bool solid, bool visible, bool enabled, bool isGrounded,
             string spriteSheetId = "DebugTexture", float gravityForce = 0f, float gravityDirection = 0f) :
@@ -49,12 +57,18 @@ namespace RavenLib.Entities
             SetActorCollisionbox();
         }
 
+        /// <summary>
+        /// Calculates the Actor's CollisionBox and Center
+        /// </summary>
         protected void SetActorCollisionbox()
         {
             SetCollisionbox();
             SetCenter();
         }
 
+        /// <summary>
+        /// Calculates the Actor's Center using its CollisionBox and Size
+        /// </summary>
         protected void SetCenter()
         {
             _center = new Vector2(
@@ -62,6 +76,9 @@ namespace RavenLib.Entities
                 _collisionBox.Bottom - ((int)_size.Y / 2));
         }
 
+        /// <summary>
+        /// Calculcates the Actor's rendering rectangle by Position and Size
+        /// </summary>
         protected void SetDrawRectangle()
         {
             int _width = _currentAnimation.Frame.Width;
@@ -74,6 +91,10 @@ namespace RavenLib.Entities
                 _height);
         }
 
+        /// <summary>
+        /// Moves the Actor out of a collision with solid entities. Otherwise, triggers a Collided event with the offending object
+        /// </summary>
+        /// <param name="entity">The entity that this object has collided with</param>
         protected virtual void HandleCollision(IEntity entity)
         {
             bool isSolid = entity.IsSolid();
@@ -178,6 +199,10 @@ namespace RavenLib.Entities
             }
         }
 
+        /// <summary>
+        /// Sets all necessary variables before invoking the Moved event
+        /// </summary>
+        /// <param name="newPosition"></param>
         protected virtual void StageMovement(Vector2 newPosition)
         {
             _previousPosition = _position;
@@ -186,6 +211,10 @@ namespace RavenLib.Entities
             SetDrawRectangle();
         }
 
+        /// <summary>
+        /// Processes any Updates to the Actor
+        /// </summary>
+        /// <param name="gameTime"></param>
         public virtual void Update(GameTime gameTime)
         {
             _position = _position + _velocity;
@@ -194,16 +223,27 @@ namespace RavenLib.Entities
             _animationManager.Update(gameTime);
         }
 
+        /// <summary>
+        /// Performs the Draw to the SpriteBatch
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             _animationManager.Draw(spriteBatch, _drawRectangle);
         }
 
+        /// <summary>
+        /// Triggers the Moved event
+        /// </summary>
         protected void OnMove()
         {
             Moved?.Invoke(this, new ActorMoveEventArgs(_collisionBox));
         }
 
+        /// <summary>
+        /// Triggers the MoveFinished event
+        /// </summary>
+        /// <param name="newPosition"></param>
         protected void OnMoveFinished(Vector2 newPosition)
         {
             MoveFinished?.Invoke(this, new ActorMoveFinishedEventArgs(newPosition));

@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace RavenLib.Input
 {
+    /// <summary>
+    /// Handles all Input via Keyboard. Has many key events that can be subscribed to as needed
+    /// </summary>
     public static class Input
     {
         private static string _jsonPath;
