@@ -46,14 +46,14 @@ namespace RavenLib.Entities
         }
 
 
-        public Entity(Vector2 position, Vector2 size, bool solid, bool visisble, bool enabled)
+        public Entity(Vector2 position, Vector2 size, bool solid, bool visible, bool enabled)
         {
             _position = position;
             _size = size;
             SetCollisionbox();
 
             _isSolid = solid;
-            _isVisible = visisble;
+            _isVisible = visible;
             _isEnabled = enabled;
         }
 

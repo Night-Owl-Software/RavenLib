@@ -101,8 +101,10 @@ namespace RavenLib.Entities
 
             if (isSolid)
             {
+                CollisionSolidEntity _solidEntity = entity as CollisionSolidEntity;
+
                 // Get the Entity's Collisionbox for calculations
-                Rectangle _entityCollisionBox = entity.GetCollisionbox();
+                Rectangle _entityCollisionBox = _solidEntity.GetCollisionbox();
 
                 // Get Center Point for CollisionObject and This to figure
                 // placement relationship between colliding objects
